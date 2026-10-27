@@ -101,6 +101,12 @@
               <span>Speed Test</span>
             </button>
 
+            <!-- Architecture Docs Modal Trigger -->
+            <button onclick="toggleDocModal(true)" class="flex items-center space-x-1.5 text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition" title="Architecture & Documentation">
+              <i class="fa-solid fa-book text-indigo-500"></i>
+              <span class="hidden sm:inline">Docs</span>
+            </button>
+
             <!-- Theme Switcher -->
             <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition" title="Toggle Theme">
               <i class="fa-solid fa-moon dark:hidden"></i>
@@ -112,6 +118,7 @@
       </div>
     </header>
 
+    <!-- Sub Header Navigation Tabs -->
     <!-- Sub Header Navigation Tabs -->
     <div class="bg-white dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 backdrop-blur-md sticky top-16 z-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,6 +137,9 @@
           </button>
           <button id="tab-btn-settings" onclick="switchTab('settings')" class="py-3 px-1 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-2 whitespace-nowrap">
             <i class="fa-solid fa-sliders"></i> Data Caps & Rules
+          </button>
+          <button id="tab-btn-docs" onclick="toggleDocModal(true)" class="py-3 px-1 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-file-code"></i> Architecture & Docs
           </button>
         </nav>
       </div>
@@ -483,6 +493,10 @@
       <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row justify-between items-center gap-2">
         <div>NetPulse Data Tracker &copy; 2026. All rights reserved.</div>
         <div class="flex items-center space-x-4">
+          <button onclick="toggleDocModal(true)" class="hover:text-indigo-500 transition underline flex items-center gap-1">
+            <i class="fa-solid fa-book"></i> System Architecture Docs
+          </button>
+          <span>•</span>
           <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> Encryption Active</span>
           <span>•</span>
           <span id="footer-data-counter">Total Session Traffic: 1.42 GB</span>
@@ -492,64 +506,203 @@
 
   </div>
 
+  <!-- System Architecture & Documentation Modal -->
+  <div id="doc-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-4xl max-h-[85vh] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center">
+            <i class="fa-solid fa-book-bookmark text-base"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg text-slate-800 dark:text-white leading-tight">System Architecture & Breakdown</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Technical documentation & module specification</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="exportDocAsText()" class="text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i> Export Docs
+          </button>
+          <button onclick="toggleDocModal(false)" class="p-2 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700 dark:text-slate-300">
+        
+        <!-- Section 1: Overview -->
+        <div>
+          <h4 class="font-bold text-base text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group"></i> 1. System Components Summary
+          </h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+              <thead class="bg-slate-100 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 font-semibold">
+                <tr>
+                  <th class="py-2.5 px-4 border-b border-slate-200 dark:border-slate-700">Component</th>
+                  <th class="py-2.5 px-4 border-b border-slate-200 dark:border-slate-700">Technology / Library</th>
+                  <th class="py-2.5 px-4 border-b border-slate-200 dark:border-slate-700">Purpose</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-700/60 font-mono text-xs">
+                <tr>
+                  <td class="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">Styling & Layout</td>
+                  <td class="py-2.5 px-4 text-indigo-600 dark:text-indigo-400">Tailwind CSS v3 (CDN)</td>
+                  <td class="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-sans">Responsive, utility-first layout with dark/light mode toggle</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">Data Visualization</td>
+                  <td class="py-2.5 px-4 text-indigo-600 dark:text-indigo-400">Chart.js v4</td>
+                  <td class="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-sans">Render dynamic line charts (telemetry) & doughnut charts (breakdown)</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">Icons & Indicators</td>
+                  <td class="py-2.5 px-4 text-indigo-600 dark:text-indigo-400">FontAwesome v6</td>
+                  <td class="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-sans">Status badges, network states, and action buttons</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">Interactive Logic</td>
+                  <td class="py-2.5 px-4 text-indigo-600 dark:text-indigo-400">Pure JavaScript (ES6+)</td>
+                  <td class="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-sans">Real-time DOM updates, threshold calculations, speed test simulator</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Modules Breakdown -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-base text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+            <i class="fa-solid fa-cubes"></i> 2. Core Modules Breakdown
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-sliders text-indigo-500"></i> A. Navigation & Control Bar
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>Status Badges:</strong> Connection health indicator and protocol status.</li>
+                <li><strong>Simulation Switch:</strong> Control active data feed streams.</li>
+                <li><strong>Theme Handler:</strong> Dynamic dark/light class toggles.</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-chart-pie text-indigo-500"></i> B. Summary & Data Cap Manager
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>Gauges:</strong> Live counters for download/upload and IP info.</li>
+                <li><strong>Cap Calculations:</strong> Percentages tracked against monthly limit.</li>
+                <li><strong>Threshold Warning:</strong> Dynamic alert states (&lt;70%, 70-90%, &gt;90%).</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i> C. Bandwidth Analytics Module
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>Timeframes:</strong> Select views for 24 Hours, 7 Days, and 30 Days.</li>
+                <li><strong>Doughnut Chart:</strong> Visual traffic category allocation (Streaming, Web, Gaming).</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-bolt text-indigo-500"></i> D. Real-Time Telemetry Stream
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>FIFO Buffer:</strong> Updates canvas data points every second.</li>
+                <li><strong>Window Capping:</strong> Maintained fixed buffer length of 15 points.</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-gauge-high text-indigo-500"></i> E. Speed Test Engine
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>Gauge Arc:</strong> Maps 0–100 Mbps to needle rotation (-90° to +90°).</li>
+                <li><strong>Sequential Test:</strong> Ping (ms) &rarr; Download (Mbps) &rarr; Upload (Mbps).</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-network-wired text-indigo-500"></i> F. Devices Inspection
+              </h5>
+              <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-400">
+                <li><strong>Device Metrics:</strong> Display IP, MAC, live bandwidth rates, and total consumption.</li>
+                <li><strong>Filter Logs:</strong> Live filterable log output by device name/type.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex justify-end">
+        <button onclick="toggleDocModal(false)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-xl text-xs transition">
+          Close Documentation
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
   <!-- JavaScript Logic -->
   <script>
     // State Management
-    const state = {
-      isSimulating: true,
-      dataCapGB: 500,
-      usedCapGB: 342.8,
-      warningThresholdPct: 80,
-      activeTab: 'dashboard',
-      simInterval: null,
-      currentTimeframe: '24h',
-      sessionTotalMB: 1420,
-      devices: [
-        { id: 1, name: "Smart TV 4K", type: "tv", ip: "192.168.1.102", mac: "A4:C1:38:89:12:01", dlToday: 18.4, ulToday: 0.8, status: "Active", icon: "fa-tv" },
-        { id: 2, name: "MacBook Pro M3", type: "laptop", ip: "192.168.1.105", mac: "BC:D2:48:10:99:A2", dlToday: 12.1, ulToday: 4.5, status: "Active", icon: "fa-laptop" },
-        { id: 3, name: "iPhone 15 Pro", type: "mobile", ip: "192.168.1.110", mac: "F2:9A:11:44:00:1E", dlToday: 3.8, ulToday: 0.6, status: "Active", icon: "fa-mobile-screen-button" },
-        { id: 4, name: "Gaming PC Desk", type: "desktop", ip: "192.168.1.120", mac: "70:85:C2:55:18:FE", dlToday: 24.5, ulToday: 6.2, status: "Active", icon: "fa-desktop" },
-        { id: 5, name: "Smart Speaker", type: "iot", ip: "192.168.1.130", mac: "00:1A:22:33:44:55", dlToday: 0.9, ulToday: 0.1, status: "Idle", icon: "fa-microchip" },
-        { id: 6, name: "Tablet Air", type: "tablet", ip: "192.168.1.142", mac: "E4:E0:A5:12:34:78", dlToday: 2.3, ulToday: 0.2, status: "Idle", icon: "fa-tablet-screen-button" }
-      ],
-      logs: [
-        { date: "2026-10-27 16:45", device: "Smart TV 4K", category: "Streaming", dl: "4.2 GB", ul: "120 MB", total: "4.32 GB" },
-        { date: "2026-10-27 15:30", device: "MacBook Pro M3", category: "Work / Cloud", dl: "1.8 GB", ul: "850 MB", total: "2.65 GB" },
-        { date: "2026-10-27 14:10", device: "Gaming PC Desk", category: "Gaming", dl: "8.5 GB", ul: "420 MB", total: "8.92 GB" },
-        { date: "2026-10-27 12:00", device: "iPhone 15 Pro", category: "Social Media", dl: "650 MB", ul: "90 MB", total: "740 MB" },
-        { date: "2026-10-26 21:15", device: "Smart TV 4K", category: "Streaming", dl: "6.1 GB", ul: "180 MB", total: "6.28 GB" },
-        { date: "2026-10-26 18:00", device: "MacBook Pro M3", category: "Web Browsing", dl: "920 MB", ul: "210 MB", total: "1.13 GB" }
-      ]
-    };
-
-    // Chart Handles
-    let mainChartHandle = null;
-    let realtimeChartHandle = null;
-    let categoryChartHandle = null;
-
-    // Initialization
-    window.onload = function() {
-      initTheme();
-      initMainChart();
-      initRealtimeChart();
-      initCategoryChart();
-      renderTopDevices();
-      renderDevicesGrid();
-      renderLogsTable();
-      updateCapProgress();
-      startRealtimeSimulation();
-    };
-
-    // Theme Management
-    function initTheme() {
-      if (localStorage.theme === 'light' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-        document.documentElement.classList.remove('dark');
+    // Modal Manager
+    function toggleDocModal(show) {
+      const modal = document.getElementById('doc-modal');
+      if (show) {
+        modal.classList.remove('hidden');
       } else {
-        document.documentElement.classList.add('dark');
+        modal.classList.add('hidden');
       }
+    }
+
+    // Export System Architecture Documentation as File
+    function exportDocAsText() {
+      const docText = `# Network & Wi-Fi Usage Tracker — Architecture Overview
+
+## 1. System Components Summary
+- Styling & Layout: Tailwind CSS v3 (Responsive, dark/light mode toggle)
+- Data Visualization: Chart.js v4 (Line charts, Doughnut charts)
+- Icons: FontAwesome v6
+- Interactive Logic: Pure JavaScript (ES6+)
+
+## 2. Core Modules Breakdown
+- Navigation & Control Bar: Status badges, live stream simulation toggle, theme switcher.
+- Summary & Data Cap Manager: Real-time throughput gauges, cap calculations, threshold alerts.
+- Bandwidth Analytics: 24h/7d/30d timeframe views, category doughnut distribution.
+- Real-Time Telemetry Stream: FIFO buffer updating at 1-second intervals.
+- Speed Test Engine: SVG animated needle gauge, latency & bandwidth tester.
+- Connected Devices: Per-device traffic breakdown, MAC & IP management.
+`;
+
+      const blob = new Blob([docText], { type: 'text/markdown;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'NetPulse_Architecture_Docs.md');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Architecture documentation downloaded!", "success");
     }
 
     function toggleTheme() {
